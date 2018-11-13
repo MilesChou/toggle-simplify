@@ -30,6 +30,9 @@ script:
 - php vendor/bin/phpcs
 - php vendor/bin/phpunit --coverage-clover=coverage.xml
 
+after_success:
+- if [[ "7.1" == "${TRAVIS_PHP_VERSION}" ]]; then bash <(curl -s https://codecov.io/bash) ; fi
+
 cache:
   directories:
   - $HOME/.composer/cache/files
