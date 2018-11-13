@@ -23,8 +23,12 @@ branches:
   - /^\d+\.x$/
   - /^\d+\.\d+\.\d+$/
 
+install:
+- composer install --prefer-dist
+
 script:
-- exit 0
+- php vendor/bin/phpcs
+- php vendor/bin/phpunit --coverage-clover=coverage.xml
 
 cache:
   directories:
