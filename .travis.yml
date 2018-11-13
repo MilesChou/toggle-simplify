@@ -1,0 +1,32 @@
+sudo: false
+os: linux
+dist: trusty
+language: php
+
+php:
+- 5.5
+- 5.6
+- 7.0
+- 7.1
+- 7.2
+- 7.3
+- nightly
+
+matrix:
+  allow_failures:
+  - php: 7.3
+  - php: nightly
+
+branches:
+  only:
+  - master
+  - /^\d+\.x$/
+  - /^\d+\.\d+\.\d+$/
+
+script:
+- exit 0
+
+cache:
+  directories:
+  - $HOME/.composer/cache/files
+  - vendor
