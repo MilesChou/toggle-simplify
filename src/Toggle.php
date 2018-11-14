@@ -122,19 +122,6 @@ class Toggle
     }
 
     /**
-     * @param array $features
-     * @return static
-     */
-    public function append(array $features)
-    {
-        foreach ($features as $feature) {
-            $this->add($feature);
-        }
-
-        return $this;
-    }
-
-    /**
      * @param string $key
      * @param string $name
      * @param mixed|null $value
