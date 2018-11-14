@@ -88,7 +88,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldThrowExceptionWithoutFeature()
+    public function shouldThrowExceptionWithoutFeatureName()
     {
         $this->setExpectedException(InvalidArgumentException::class, 'Feature key `name` is not found');
 
@@ -96,7 +96,51 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
             'processor' => function () {
                 return true;
             },
-            'params' => []
+            'params' => [],
+        ]);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWithoutFeatureProcessor()
+    {
+        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `processor` is not found');
+
+        $this->target->add([
+            'name' => 'whatever',
+            'params' => [],
+        ]);
+    }
+
+    public function invalidParams()
+    {
+        return [
+            [null],
+            [true],
+            [false],
+            [123],
+            [3.14],
+            [''],
+            ['str'],
+            [new \stdClass()],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidParams
+     */
+    public function shouldThrowExceptionWithFeatureParamsNotArray($invalidParams)
+    {
+        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `params` must be array');
+
+        $this->target->add([
+            'name' => 'whatever',
+            'processor' => function () {
+                return true;
+            },
+            'params' => $invalidParams,
         ]);
     }
 
@@ -108,6 +152,31 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(RuntimeException::class, "Feature 'not-exist' is not found");
 
         $this->target->feature('not-exist');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldThrowExceptionWhenAddFeatureButFeatureExist()
+    {
+        $this->setExpectedException(RuntimeException::class, "Feature 'foo' is exist");
+
+        $this->target->create('foo');
+        $this->target->create('foo');
+    }
+
+    /**
+     * @test
+     */
+    public function shouldFlushAllConfigWhenCallFlush()
+    {
+        $this->target->create('foo');
+
+        $this->assertTrue($this->target->has('foo'));
+
+        $this->target->flush();
+
+        $this->assertFalse($this->target->has('foo'));
     }
 
     /**
@@ -364,6 +433,18 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['foo' => 'a', 'bar' => 'b'], $this->target->params('f1'));
         $this->assertSame('a', $this->target->params('f1', 'foo'));
         $this->assertSame('b', $this->target->params('f1', 'bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeWorkWhenCallProcessor()
+    {
+        $this->target->create('f1', null, [
+            'foo' => 'a',
+        ]);
+
+        $this->assertInternalType('callable', $this->target->processor('f1'));
     }
 
     /**

@@ -70,7 +70,7 @@ class Toggle
             throw new InvalidArgumentException('Feature key `processor` must be callable');
         }
 
-        if (isset($feature['params']) && !is_array($feature['params'])) {
+        if (array_key_exists('params', $feature) && !is_array($feature['params'])) {
             throw new InvalidArgumentException('Feature key `params` must be array');
         }
     }
