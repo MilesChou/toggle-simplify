@@ -135,6 +135,27 @@ class Toggle
     }
 
     /**
+     * @param string $key
+     * @param string $name
+     * @param mixed|null $value
+     * @return mixed|static
+     */
+    public function attribute($name, $key, $value = null)
+    {
+        $this->assertFeatureExist($name);
+
+        $feature = $this->feature($name);
+
+        if (null === $value) {
+            return $feature[$key];
+        }
+
+        $feature[$key] = $value;
+
+        return $this->put($feature);
+    }
+
+    /**
      * @param string $name
      * @param callable|bool|null $processor
      * @param array $params
@@ -169,9 +190,7 @@ class Toggle
      */
     public function feature($name)
     {
-        if (!$this->has($name)) {
-            throw new RuntimeException("Feature '{$name}' is not found");
-        }
+        $this->assertFeatureExist($name);
 
         return $this->features[$name];
     }
@@ -226,6 +245,51 @@ class Toggle
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $name
+     * @param array|null $key
+     * @return mixed|static
+     */
+    public function params($name, $key = null)
+    {
+        $params = $this->attribute($name, 'params');
+
+        if (is_array($key)) {
+            $params = array_merge($params, $key);
+
+            return $this->attribute($name, 'params', $params);
+        }
+
+        if (null === $key) {
+            return $params;
+        }
+
+        return $params[$key];
+    }
+
+    /**
+     * @param string $name
+     * @param callable|null $processor
+     * @return callable|static
+     */
+    public function processor($name, $processor = null)
+    {
+        return $this->attribute($name, 'processor', $processor);
+    }
+
+    /**
+     * @param array $feature
+     * @return static
+     */
+    public function put(array $feature)
+    {
+        static::assertFeature($feature);
+
+        $this->features[$feature['name']] = $feature;
+
+        return $this;
     }
 
     /**
@@ -303,6 +367,16 @@ class Toggle
         }
 
         return $this;
+    }
+
+    /**
+     * @param $name
+     */
+    private function assertFeatureExist($name)
+    {
+        if (!$this->has($name)) {
+            throw new RuntimeException("Feature '{$name}' is not found");
+        }
     }
 
     /**

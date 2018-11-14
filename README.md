@@ -73,7 +73,7 @@ $toggle->create('f1', true, ['name' => 'Miles']);
 $toggle->create('f2', false, ['name' => 'Chou']);
 
 // Will return 'Chou'
-$toggle->feature('f1')['params']['name'];
+$toggle->params('f1', 'name');
 
 // Also using in callback
 $toggle->create('f3', function($context, array $params) {

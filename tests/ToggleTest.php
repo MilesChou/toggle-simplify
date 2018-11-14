@@ -80,7 +80,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     {
         $this->target->create('foo', null, ['some' => 'thing']);
 
-        $this->assertSame('thing', $this->target->feature('foo')['params']['some']);
+        $this->assertSame('thing', $this->target->params('foo', 'some'));
     }
 
     /**
@@ -244,5 +244,34 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
         $actual->result(['f1' => true]);
 
         $this->assertFalse($actual->isActive('f1'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnCorrectResultWhenCreateFromArrayWithEmptyData()
+    {
+        $actual = Toggle::createFromArray([]);
+
+        $this->assertEmpty($actual->all());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeWorkWhenCallParams()
+    {
+        $this->target->create('f1', null, [
+            'foo' => 'a',
+        ]);
+
+        $this->assertSame(['foo' => 'a'], $this->target->params('f1'));
+        $this->assertSame('a', $this->target->params('f1', 'foo'));
+
+        $this->target->params('f1', ['bar' => 'b']);
+
+        $this->assertSame(['foo' => 'a', 'bar' => 'b'], $this->target->params('f1'));
+        $this->assertSame('a', $this->target->params('f1', 'foo'));
+        $this->assertSame('b', $this->target->params('f1', 'bar'));
     }
 }
