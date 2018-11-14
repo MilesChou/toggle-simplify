@@ -88,27 +88,11 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldThrowExceptionWithoutFeatureName()
-    {
-        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `name` is not found');
-
-        $this->target->add([
-            'processor' => function () {
-                return true;
-            },
-            'params' => [],
-        ]);
-    }
-
-    /**
-     * @test
-     */
     public function shouldThrowExceptionWithoutFeatureProcessor()
     {
         $this->setExpectedException(InvalidArgumentException::class, 'Feature key `processor` is not found');
 
-        $this->target->add([
-            'name' => 'whatever',
+        $this->target->add('whatever', [
             'params' => [],
         ]);
     }
@@ -135,8 +119,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(InvalidArgumentException::class, 'Feature key `params` must be array');
 
-        $this->target->add([
-            'name' => 'whatever',
+        $this->target->add('whatever', [
             'processor' => function () {
                 return true;
             },

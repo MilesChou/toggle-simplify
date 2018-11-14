@@ -49,16 +49,13 @@ class Toggle
     }
 
     /**
+     * @param string $name
      * @param array $feature
      * @throws InvalidArgumentException
      */
-    private static function assertFeature(array $feature)
+    private static function assertFeature($name, array $feature)
     {
-        if (!array_key_exists('name', $feature)) {
-            throw new InvalidArgumentException('Feature key `name` is not found');
-        }
-
-        if (!is_string($feature['name'])) {
+        if (!is_string($name)) {
             throw new InvalidArgumentException('Feature key `name` must be string');
         }
 
@@ -97,18 +94,19 @@ class Toggle
     }
 
     /**
+     * @param string $name
      * @param array $feature
      * @return static
      */
-    public function add(array $feature)
+    public function add($name, array $feature)
     {
-        static::assertFeature($feature);
+        static::assertFeature($name, $feature);
 
-        if ($this->has($feature['name'])) {
-            throw new RuntimeException("Feature '{$feature['name']}' is exist");
+        if ($this->has($name)) {
+            throw new RuntimeException("Feature '{$name}' is exist");
         }
 
-        $this->features[$feature['name']] = $feature;
+        $this->features[$name] = $feature;
 
         return $this;
     }
@@ -139,7 +137,7 @@ class Toggle
 
         $feature[$key] = $value;
 
-        return $this->set($feature);
+        return $this->set($name, $feature);
     }
 
     /**
@@ -162,8 +160,7 @@ class Toggle
             };
         }
 
-        return $this->add([
-            'name' => $name,
+        return $this->add($name, [
             'processor' => $processor,
             'params' => $params,
             'staticResult' => $staticResult,
@@ -310,14 +307,15 @@ class Toggle
     }
 
     /**
+     * @param string $name
      * @param array $feature
      * @return static
      */
-    public function set(array $feature)
+    public function set($name, array $feature)
     {
-        static::assertFeature($feature);
+        static::assertFeature($name, $feature);
 
-        $this->features[$feature['name']] = $feature;
+        $this->features[$name] = $feature;
 
         return $this;
     }
