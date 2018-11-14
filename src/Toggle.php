@@ -248,6 +248,14 @@ class Toggle
     }
 
     /**
+     * @return array
+     */
+    public function names()
+    {
+        return array_keys($this->features);
+    }
+
+    /**
      * @param string $name
      * @param array|null $key
      * @return mixed|static
@@ -309,7 +317,17 @@ class Toggle
     public function result(array $result = null)
     {
         if (null === $result) {
-            return $this->preserveResult;
+            return array_reduce($this->names(), function ($carry, $feature) {
+                $carry[$feature] = isset($this->preserveResult[$feature])
+                    ? $this->preserveResult[$feature]
+                    : $this->isActive($feature);
+
+                return $carry;
+            }, []);
+        }
+
+        foreach ($result as $name => $feature) {
+            $this->assertFeatureExist($name);
         }
 
         $this->preserveResult = array_merge($this->preserveResult, $result);

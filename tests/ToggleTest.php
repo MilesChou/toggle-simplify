@@ -228,15 +228,12 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     {
         $this->target->create('foo', null, [], false);
 
-        $data = [
+        $this->target->result([
             'foo' => true,
-        ];
-
-        $this->target->result($data);
+        ]);
 
         $this->assertFalse($this->target->isActive('foo'));
     }
-
 
     /**
      * @test
@@ -295,6 +292,49 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
         $actual->result(['f1' => true]);
 
         $this->assertFalse($actual->isActive('f1'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnResultResultWhenGetTheResult()
+    {
+        $actual = $this->target
+            ->create('f1', true)
+            ->create('f2', false)
+            ->result();
+
+        $this->assertSame(['f1' => true, 'f2' => false], $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnResultResultWhenGetTheResultWithSomeExistPreserveResult()
+    {
+        $this->target
+            ->create('f1', true)
+            ->create('f2', false);
+
+        $this->target->isActive('f1');
+
+        $actual = $this->target->result();
+
+        $this->assertSame(['f1' => true, 'f2' => false], $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnResultResultWhenPutTheResult()
+    {
+        $this->target
+            ->create('f1')
+            ->create('f2')
+            ->result(['f1' => true, 'f2' => false]);
+
+        $this->assertTrue($this->target->isActive('f1'));
+        $this->assertFalse($this->target->isActive('f2'));
     }
 
     /**
