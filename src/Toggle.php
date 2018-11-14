@@ -152,7 +152,7 @@ class Toggle
 
         $feature[$key] = $value;
 
-        return $this->put($feature);
+        return $this->set($feature);
     }
 
     /**
@@ -288,19 +288,6 @@ class Toggle
     }
 
     /**
-     * @param array $feature
-     * @return static
-     */
-    public function put(array $feature)
-    {
-        static::assertFeature($feature);
-
-        $this->features[$feature['name']] = $feature;
-
-        return $this;
-    }
-
-    /**
      * @param string $name
      */
     public function remove($name)
@@ -336,13 +323,14 @@ class Toggle
     }
 
     /**
-     * @param array $features
+     * @param array $feature
      * @return static
      */
-    public function set(array $features)
+    public function set(array $feature)
     {
-        $this->flush();
-        $this->append($features);
+        static::assertFeature($feature);
+
+        $this->features[$feature['name']] = $feature;
 
         return $this;
     }
