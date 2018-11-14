@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use InvalidArgumentException;
+use RuntimeException;
 use Toggle;
 
 class ToggleTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +28,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldThrowExceptionWhenCallIsActiveWithNoDataAndStrictMode()
     {
-        $this->setExpectedException('RuntimeException');
+        $this->setExpectedException(RuntimeException::class);
 
         $this->target->setStrict(true);
 
@@ -39,6 +41,26 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     public function shouldReturnFalseDefaultWhenCallIsActive()
     {
         $this->assertFalse($this->target->isActive('not-exist'));
+    }
+
+    public function invalidFeature()
+    {
+        return [
+            [123],
+            [3.14],
+            [new \stdClass()],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidFeature
+     */
+    public function shouldThrowExceptionWithInvalidFeature($invalidFeature)
+    {
+        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `name` must be string');
+
+        $this->target->create($invalidFeature);
     }
 
     public function invalidProcessor()
@@ -56,9 +78,9 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider invalidProcessor
      */
-    public function shouldThrowExceptionWithInvalidFeature($invalidProcessor)
+    public function shouldThrowExceptionWithInvalidProcessor($invalidProcessor)
     {
-        $this->setExpectedException('InvalidArgumentException', 'Feature key `processor` must be callable');
+        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `processor` must be callable');
 
         $this->target->create('foo', $invalidProcessor);
     }
@@ -66,9 +88,24 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldThrowExceptionWithoutFeature()
+    {
+        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `name` is not found');
+
+        $this->target->add([
+            'processor' => function () {
+                return true;
+            },
+            'params' => []
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function shouldThrowExceptionWhenGetFeatureAndFeatureNotFound()
     {
-        $this->setExpectedException('RuntimeException', "Feature 'not-exist' is not found");
+        $this->setExpectedException(RuntimeException::class, "Feature 'not-exist' is not found");
 
         $this->target->feature('not-exist');
     }
@@ -110,6 +147,20 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldThrowExceptionWhenCreateFeatureAndReturnNull()
+    {
+        $this->setExpectedException(RuntimeException::class);
+
+        $this->target->create('foo', function () {
+            return null;
+        });
+
+        $this->target->isActive('foo');
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnTrueWhenCreateFeatureUsingStaticAndReturnTrue()
     {
         $this->target->create('foo', true);
@@ -132,7 +183,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldThrowExceptionWhenCreateFeatureAndRemoveFeature()
     {
-        $this->setExpectedException('RuntimeException', 'foo');
+        $this->setExpectedException(RuntimeException::class, 'foo');
 
         $this->target->setStrict(true);
 
@@ -273,5 +324,18 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['foo' => 'a', 'bar' => 'b'], $this->target->params('f1'));
         $this->assertSame('a', $this->target->params('f1', 'foo'));
         $this->assertSame('b', $this->target->params('f1', 'bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldBeWorkWhenCallWhen()
+    {
+        $this->target->create('f1', true, ['bar' => 'b']);
+
+        $this->target->when('f1', function ($context, $params) {
+            $this->assertSame('a', $context['foo']);
+            $this->assertSame('b', $params['bar']);
+        }, ['foo' => 'a']);
     }
 }

@@ -59,7 +59,7 @@ class Toggle
         }
 
         if (!is_string($feature['name'])) {
-            throw new InvalidArgumentException('Feature key `name` must be array');
+            throw new InvalidArgumentException('Feature key `name` must be string');
         }
 
         if (!array_key_exists('processor', $feature)) {
@@ -363,7 +363,7 @@ class Toggle
     public function when($name, callable $callable, array $context = [])
     {
         if ($this->isActive($name, $context)) {
-            $callable($context, $this->feature($name)['params']);
+            $callable($context, $this->params($name));
         }
 
         return $this;
@@ -389,7 +389,7 @@ class Toggle
         $result = call_user_func($feature['processor'], $context, $feature['params']);
 
         if (!is_bool($result)) {
-            throw new InvalidArgumentException('Processed result is not valid');
+            throw new RuntimeException('Processed result is not valid');
         }
 
         return $result;
