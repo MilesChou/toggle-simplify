@@ -127,7 +127,9 @@ class Toggle
      */
     public function attribute($name, $key, $value = null)
     {
-        $this->assertFeatureExist($name);
+        if (!$this->has($name)) {
+            return $value;
+        }
 
         $feature = $this->feature($name);
 
@@ -229,6 +231,16 @@ class Toggle
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $name
+     * @param array $context
+     * @return bool
+     */
+    public function isInactive($name, $context = [])
+    {
+        return !$this->isActive($name, $context);
     }
 
     /**
@@ -346,15 +358,37 @@ class Toggle
      * When $feature on, then call $callable
      *
      * @param string $name
-     * @param callable $callable
+     * @param callable $callback
+     * @param callable $default
      * @param array $context
-     *
      * @return static
      */
-    public function when($name, callable $callable, array $context = [])
+    public function when($name, callable $callback, callable $default = null, array $context = [])
     {
         if ($this->isActive($name, $context)) {
-            $callable($context, $this->params($name));
+            return $callback($context, $this->params($name));
+        } elseif ($default) {
+            return $default($context, $this->params($name));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Unless $feature on, otherwise call $callable
+     *
+     * @param string $name
+     * @param callable $callback
+     * @param callable $default
+     * @param array $context
+     * @return static
+     */
+    public function unless($name, callable $callback, callable $default = null, array $context = [])
+    {
+        if ($this->isInactive($name, $context)) {
+            return $callback($context, $this->params($name));
+        } elseif ($default) {
+            return $default($context, $this->params($name));
         }
 
         return $this;

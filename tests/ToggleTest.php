@@ -41,6 +41,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     public function shouldReturnFalseDefaultWhenCallIsActive()
     {
         $this->assertFalse($this->target->isActive('not-exist'));
+        $this->assertTrue($this->target->isInactive('not-exist'));
     }
 
     public function invalidFeature()
@@ -170,6 +171,15 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
         $this->target->create('foo', null, ['some' => 'thing']);
 
         $this->assertSame('thing', $this->target->params('foo', 'some'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnDefaultValueWhenCallAttributeWhenNotFoundTheFeature()
+    {
+        $this->assertNull($this->target->attribute('not-exist', 'whatever'));
+        $this->assertSame('same', $this->target->attribute('not-exist', 'whatever', 'same'));
     }
 
     /**
@@ -431,6 +441,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Toggle::when
      * @test
      */
     public function shouldBeWorkWhenCallWhen()
@@ -440,6 +451,86 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
         $this->target->when('f1', function ($context, $params) {
             $this->assertSame('a', $context['foo']);
             $this->assertSame('b', $params['bar']);
-        }, ['foo' => 'a']);
+        }, null, ['foo' => 'a']);
+    }
+
+    /**
+     * @covers Toggle::when
+     * @test
+     */
+    public function shouldBeWorkWhenCallWhenWithDefault()
+    {
+        $this->target->create('f1', false, ['bar' => 'b']);
+
+        $this->target->when(
+            'f1',
+            function () {
+            },
+            function () {
+                $this->assertTrue(true);
+            },
+            ['foo' => 'a']
+        );
+    }
+
+    /**
+     * @covers Toggle::when
+     * @test
+     */
+    public function shouldBeWorkWhenCallWhenWithoutDefault()
+    {
+        $this->target->create('f1', false, ['bar' => 'b']);
+
+        $actual = $this->target->when('f1', function () {
+        });
+
+        $this->assertInstanceOf(Toggle::class, $actual);
+    }
+
+    /**
+     * @covers Toggle::unless
+     * @test
+     */
+    public function shouldBeWorkWhenCallUnless()
+    {
+        $this->target->create('f1', false, ['bar' => 'b']);
+
+        $this->target->unless('f1', function ($context, $params) {
+            $this->assertSame('a', $context['foo']);
+            $this->assertSame('b', $params['bar']);
+        }, null, ['foo' => 'a']);
+    }
+
+    /**
+     * @covers Toggle::unless
+     * @test
+     */
+    public function shouldBeWorkWhenCallUnlessWithDefault()
+    {
+        $this->target->create('f1', true, ['bar' => 'b']);
+
+        $this->target->unless(
+            'f1',
+            function () {
+            },
+            function () {
+                $this->assertTrue(true);
+            },
+            ['foo' => 'a']
+        );
+    }
+
+    /**
+     * @covers Toggle::unless
+     * @test
+     */
+    public function shouldBeWorkWhenCallUnlessWithoutDefault()
+    {
+        $this->target->create('f1', true, ['bar' => 'b']);
+
+        $actual = $this->target->unless('f1', function () {
+        });
+
+        $this->assertInstanceOf(Toggle::class, $actual);
     }
 }
