@@ -5,7 +5,7 @@ namespace MilesChou\Toggle\Simplify;
 use InvalidArgumentException;
 use RuntimeException;
 
-class Toggle
+class Toggle implements ToggleInterface
 {
     /**
      * @var array
@@ -366,7 +366,7 @@ class Toggle
      * @param callable $callback
      * @param callable $default
      * @param array $context
-     * @return static
+     * @return mixed|static
      */
     public function when($name, callable $callback, callable $default = null, array $context = [])
     {
@@ -386,7 +386,7 @@ class Toggle
      * @param callable $callback
      * @param callable $default
      * @param array $context
-     * @return static
+     * @return mixed|static
      */
     public function unless($name, callable $callback, callable $default = null, array $context = [])
     {
