@@ -42,14 +42,14 @@ interface ToggleInterface
      * @param array $context
      * @return bool
      */
-    public function isActive($name, $context = []);
+    public function isActive($name, array $context = []);
 
     /**
      * @param string $name
      * @param array $context
      * @return bool
      */
-    public function isInactive($name, $context = []);
+    public function isInactive($name, array $context = []);
 
     /**
      * @return array
@@ -83,13 +83,6 @@ interface ToggleInterface
      * @return array
      */
     public function result(array $result = null);
-
-    /**
-     * @param string $name
-     * @param array $feature
-     * @return static
-     */
-    public function set($name, array $feature);
 
     /**
      * When $feature on, then call $callable

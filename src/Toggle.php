@@ -209,7 +209,7 @@ class Toggle implements ToggleInterface
      * @param array $context
      * @return bool
      */
-    public function isActive($name, $context = [])
+    public function isActive($name, array $context = [])
     {
         if (!$this->has($name)) {
             if ($this->strict) {
@@ -243,7 +243,7 @@ class Toggle implements ToggleInterface
      * @param array $context
      * @return bool
      */
-    public function isInactive($name, $context = [])
+    public function isInactive($name, array $context = [])
     {
         return !$this->isActive($name, $context);
     }
