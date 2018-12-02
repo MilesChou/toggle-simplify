@@ -1,5 +1,10 @@
 <?php
 
+namespace MilesChou\Toggle\Simplify;
+
+use InvalidArgumentException;
+use RuntimeException;
+
 class Toggle
 {
     /**

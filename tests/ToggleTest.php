@@ -3,8 +3,8 @@
 namespace Tests;
 
 use InvalidArgumentException;
+use MilesChou\Toggle\Simplify\Toggle;
 use RuntimeException;
-use Toggle;
 
 class ToggleTest extends \PHPUnit_Framework_TestCase
 {
@@ -441,7 +441,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Toggle::when
+     * @covers \MilesChou\Toggle\Simplify\Toggle::when
      * @test
      */
     public function shouldBeWorkWhenCallWhen()
@@ -455,7 +455,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Toggle::when
+     * @covers \MilesChou\Toggle\Simplify\Toggle::when
      * @test
      */
     public function shouldBeWorkWhenCallWhenWithDefault()
@@ -474,7 +474,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Toggle::when
+     * @covers \MilesChou\Toggle\Simplify\Toggle::when
      * @test
      */
     public function shouldBeWorkWhenCallWhenWithoutDefault()
@@ -488,7 +488,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Toggle::unless
+     * @covers \MilesChou\Toggle\Simplify\Toggle::unless
      * @test
      */
     public function shouldBeWorkWhenCallUnless()
@@ -502,7 +502,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Toggle::unless
+     * @covers \MilesChou\Toggle\Simplify\Toggle::unless
      * @test
      */
     public function shouldBeWorkWhenCallUnlessWithDefault()
@@ -521,7 +521,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Toggle::unless
+     * @covers \MilesChou\Toggle\Simplify\Toggle::unless
      * @test
      */
     public function shouldBeWorkWhenCallUnlessWithoutDefault()

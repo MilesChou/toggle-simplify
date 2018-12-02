@@ -23,9 +23,9 @@
         "squizlabs/php_codesniffer": "^3.2"
     },
     "autoload": {
-        "classmap": [
-            "src"
-        ]
+        "psr-4": {
+            "MilesChou\\Toggle\\Simplify\\": "src"
+        }
     },
     "autoload-dev": {
         "psr-4": {
