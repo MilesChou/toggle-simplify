@@ -11,14 +11,6 @@ interface ToggleInterface
 
     /**
      * @param string $name
-     * @param string $key
-     * @param mixed|null $value
-     * @return mixed|static
-     */
-    public function attribute($name, $key, $value = null);
-
-    /**
-     * @param string $name
      * @param callable|bool|null $processor
      * @param array $params
      * @param bool|null $staticResult
