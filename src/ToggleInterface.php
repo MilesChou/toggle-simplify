@@ -80,7 +80,7 @@ interface ToggleInterface
      * Import / export result data
      *
      * @param array|null $result
-     * @return array
+     * @return array|static
      */
     public function result(array $result = null);
 

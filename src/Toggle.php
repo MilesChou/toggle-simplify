@@ -300,7 +300,7 @@ class Toggle implements ToggleInterface
      * Import / export result data
      *
      * @param array|null $result
-     * @return array
+     * @return array|static
      */
     public function result(array $result = null)
     {
@@ -320,7 +320,7 @@ class Toggle implements ToggleInterface
 
         $this->preserveResult = array_merge($this->preserveResult, $result);
 
-        return $result;
+        return $this;
     }
 
     /**
