@@ -448,7 +448,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     {
         $this->target->create('f1', true, ['bar' => 'b']);
 
-        $this->target->when('f1', function ($context, $params) {
+        $this->target->when('f1', function ($params, $context) {
             $this->assertSame('a', $context['foo']);
             $this->assertSame('b', $params['bar']);
         }, null, ['foo' => 'a']);
@@ -495,7 +495,7 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     {
         $this->target->create('f1', false, ['bar' => 'b']);
 
-        $this->target->unless('f1', function ($context, $params) {
+        $this->target->unless('f1', function ($params, $context) {
             $this->assertSame('a', $context['foo']);
             $this->assertSame('b', $params['bar']);
         }, null, ['foo' => 'a']);

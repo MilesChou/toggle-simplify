@@ -371,9 +371,9 @@ class Toggle implements ToggleInterface
     public function when($name, callable $callback, callable $default = null, array $context = [])
     {
         if ($this->isActive($name, $context)) {
-            return $callback($context, $this->params($name));
+            return $callback($this->params($name), $context);
         } elseif ($default) {
-            return $default($context, $this->params($name));
+            return $default($this->params($name), $context);
         }
 
         return $this;
@@ -391,9 +391,9 @@ class Toggle implements ToggleInterface
     public function unless($name, callable $callback, callable $default = null, array $context = [])
     {
         if ($this->isInactive($name, $context)) {
-            return $callback($context, $this->params($name));
+            return $callback($this->params($name), $context);
         } elseif ($default) {
-            return $default($context, $this->params($name));
+            return $default($this->params($name), $context);
         }
 
         return $this;
