@@ -258,10 +258,11 @@ class Toggle implements ToggleInterface
 
     /**
      * @param string $name
-     * @param array|null $key
+     * @param mixed|null $key
+     * @param mixed|null $default
      * @return mixed|static
      */
-    public function params($name, $key = null)
+    public function params($name, $key = null, $default = null)
     {
         $params = $this->attribute($name, 'params');
 
@@ -275,7 +276,11 @@ class Toggle implements ToggleInterface
             return $params;
         }
 
-        return $params[$key];
+        if (array_key_exists($key, $params)) {
+            return $params[$key];
+        }
+
+        return $default;
     }
 
     /**

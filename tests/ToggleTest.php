@@ -176,6 +176,16 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldReturnDefaultWhenCreateWithoutParam()
+    {
+        $this->target->create('foo', null, ['some' => 'thing']);
+
+        $this->assertSame('default', $this->target->params('foo', 'not-exist', 'default'));
+    }
+
+    /**
+     * @test
+     */
     public function shouldReturnDefaultValueWhenCallAttributeWhenNotFoundTheFeature()
     {
         $this->assertNull($this->target->attribute('not-exist', 'whatever'));
