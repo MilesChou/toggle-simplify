@@ -195,7 +195,7 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReturnSameResultWhenIsActiveWithDifferentContext()
+    public function shouldReturnSameResultWhenIsActiveWithDifferentContextBecausePreserveResult()
     {
         $this->target->create('f1', function ($context) {
             return 0 === $context['id'] % 2;
@@ -203,6 +203,32 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->target->isActive('f1', ['id' => 2]));
         $this->assertTrue($this->target->isActive('f1', ['id' => 3]));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnResultWhenIsActiveWithDefaultContext()
+    {
+        $this->target->context(['id' => 2]);
+        $this->target->create('f1', function ($context) {
+            return 0 === $context['id'] % 2;
+        });
+
+        $this->assertTrue($this->target->isActive('f1'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldOverwriteDefaultContextWhenPassWithCustomContext()
+    {
+        $this->target->context(['id' => 2]);
+        $this->target->create('f1', function ($context) {
+            return 0 === $context['id'] % 2;
+        });
+
+        $this->assertFalse($this->target->isActive('f1', ['id' => 3]));
     }
 
     /**

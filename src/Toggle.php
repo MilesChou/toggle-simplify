@@ -10,6 +10,11 @@ class Toggle implements ToggleInterface
     /**
      * @var array
      */
+    private $context = [];
+
+    /**
+     * @var array
+     */
     private $features = [];
 
     /**
@@ -138,6 +143,21 @@ class Toggle implements ToggleInterface
     }
 
     /**
+     * @param array|null $context
+     * @return mixed
+     */
+    public function context(array $context = null)
+    {
+        if (null === $context) {
+            return $this->context;
+        }
+
+        $this->context = $context;
+
+        return $this;
+    }
+
+    /**
      * @param string $name
      * @param callable|bool|null $processor
      * @param array $params
@@ -224,6 +244,10 @@ class Toggle implements ToggleInterface
 
         if (isset($feature['static'])) {
             return $feature['static'];
+        }
+
+        if (empty($context)) {
+            $context = $this->context();
         }
 
         if (!isset($this->preserveResult[$name])) {

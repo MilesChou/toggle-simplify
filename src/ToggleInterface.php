@@ -10,6 +10,12 @@ interface ToggleInterface
     public function all();
 
     /**
+     * @param array|null $context
+     * @return mixed
+     */
+    public function context(array $context = null);
+
+    /**
      * @param string $name
      * @param callable|bool|null $processor
      * @param array $params
