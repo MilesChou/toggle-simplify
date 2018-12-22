@@ -13,10 +13,10 @@ interface ToggleInterface
      * @param string $name
      * @param callable|bool|null $processor
      * @param array $params
-     * @param bool|null $staticResult
+     * @param bool|null $static
      * @return static
      */
-    public function create($name, $processor = null, array $params = [], $staticResult = null);
+    public function create($name, $processor = null, array $params = [], $static = null);
 
     /**
      * @param bool $preserve

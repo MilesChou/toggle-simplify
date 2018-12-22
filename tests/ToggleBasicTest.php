@@ -281,7 +281,7 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
     {
         $actual = Toggle::createFromArray([
             'f1' => [
-                'staticResult' => false,
+                'static' => false,
             ],
         ]);
 

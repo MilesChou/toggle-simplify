@@ -37,12 +37,7 @@ class Toggle implements ToggleInterface
         foreach ($config as $name => $item) {
             $item = static::normalizeConfigItem($item);
 
-            $toggle->create(
-                $name,
-                $item['processor'],
-                $item['params'],
-                $item['staticResult']
-            );
+            $toggle->create($name, $item['processor'], $item['params'], $item['static']);
         }
 
         return $toggle;
@@ -86,8 +81,8 @@ class Toggle implements ToggleInterface
             $config['params'] = [];
         }
 
-        if (!isset($config['staticResult']) || !is_bool($config['staticResult'])) {
-            $config['staticResult'] = null;
+        if (!isset($config['static']) || !is_bool($config['static'])) {
+            $config['static'] = null;
         }
 
         return $config;
@@ -146,10 +141,10 @@ class Toggle implements ToggleInterface
      * @param string $name
      * @param callable|bool|null $processor
      * @param array $params
-     * @param bool|null $staticResult
+     * @param bool|null $static
      * @return static
      */
-    public function create($name, $processor = null, array $params = [], $staticResult = null)
+    public function create($name, $processor = null, array $params = [], $static = null)
     {
         // default is false
         if (null === $processor) {
@@ -165,7 +160,7 @@ class Toggle implements ToggleInterface
         return $this->add($name, [
             'processor' => $processor,
             'params' => $params,
-            'staticResult' => $staticResult,
+            'static' => $static,
         ]);
     }
 
@@ -227,8 +222,8 @@ class Toggle implements ToggleInterface
 
         $feature = $this->feature($name);
 
-        if (isset($feature['staticResult'])) {
-            return $feature['staticResult'];
+        if (isset($feature['static'])) {
+            return $feature['static'];
         }
 
         if (!isset($this->preserveResult[$name])) {
