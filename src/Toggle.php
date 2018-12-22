@@ -13,11 +13,6 @@ class Toggle implements ToggleInterface
     private $features = [];
 
     /**
-     * @var bool
-     */
-    private $preserve = true;
-
-    /**
      * @var array
      */
     private $preserveResult = [];
@@ -174,6 +169,17 @@ class Toggle implements ToggleInterface
         ]);
     }
 
+    public function duplicate($preserve = false)
+    {
+        $clone = clone $this;
+
+        if (!$preserve) {
+            $clone->preserveResult = [];
+        }
+
+        return $clone;
+    }
+
     /**
      * @param string $name
      * @return array
@@ -225,17 +231,11 @@ class Toggle implements ToggleInterface
             return $feature['staticResult'];
         }
 
-        if (isset($this->preserveResult[$name])) {
-            return $this->preserveResult[$name];
+        if (!isset($this->preserveResult[$name])) {
+            $this->preserveResult[$name] = $this->process($feature, $context);
         }
 
-        $result = $this->process($feature, $context);
-
-        if ($this->preserve) {
-            $this->preserveResult[$name] = $result;
-        }
-
-        return $result;
+        return $this->preserveResult[$name];
     }
 
     /**
@@ -338,17 +338,6 @@ class Toggle implements ToggleInterface
         static::assertFeature($name, $feature);
 
         $this->features[$name] = $feature;
-
-        return $this;
-    }
-
-    /**
-     * @param bool $preserve
-     * @return static
-     */
-    public function setPreserve($preserve)
-    {
-        $this->preserve = $preserve;
 
         return $this;
     }

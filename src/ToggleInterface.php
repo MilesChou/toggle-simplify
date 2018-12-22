@@ -19,6 +19,12 @@ interface ToggleInterface
     public function create($name, $processor = null, array $params = [], $staticResult = null);
 
     /**
+     * @param bool $preserve
+     * @return ToggleInterface
+     */
+    public function duplicate($preserve = false);
+
+    /**
      * @return void
      */
     public function flush();

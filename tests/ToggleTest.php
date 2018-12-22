@@ -281,16 +281,16 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldReturnDifferentResultWhenIsActiveWithDifferentContextWithoutPreserve()
+    public function shouldReturnDifferentResultWhenCallIsActiveAfterDuplicateWithPreserveParameter()
     {
         $this->target->create('f1', function ($context) {
             return 0 === $context['id'] % 2;
         });
 
-        $this->target->setPreserve(false);
-
         $this->assertTrue($this->target->isActive('f1', ['id' => 2]));
-        $this->assertFalse($this->target->isActive('f1', ['id' => 3]));
+
+        $this->assertFalse($this->target->duplicate(false)->isActive('f1', ['id' => 3]));
+        $this->assertTrue($this->target->duplicate(true)->isActive('f1', ['id' => 3]));
     }
 
     /**
