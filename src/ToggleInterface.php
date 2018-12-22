@@ -26,7 +26,7 @@ interface ToggleInterface
 
     /**
      * @param bool $preserve
-     * @return ToggleInterface
+     * @return static
      */
     public function duplicate($preserve = false);
 
