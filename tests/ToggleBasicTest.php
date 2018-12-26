@@ -161,6 +161,23 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function shouldReturnFalseWhenFeatureIsNotInitialButResultSet()
+    {
+        $this->target->create('f1', true);
+
+        $this->target->result([
+            'f2' => true,
+        ]);
+
+        $actual = $this->target->result();
+
+        $this->assertArrayHasKey('f1', $actual);
+        $this->assertArrayNotHasKey('f2', $actual);
+    }
+
+    /**
+     * @test
+     */
     public function shouldThrowExceptionWhenCreateFeatureAndReturnNull()
     {
         $this->setExpectedException(RuntimeException::class);

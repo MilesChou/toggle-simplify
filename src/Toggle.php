@@ -338,9 +338,8 @@ class Toggle implements ToggleInterface
             }, []);
         }
 
-        foreach ($result as $name => $feature) {
-            $this->assertFeatureExist($name);
-        }
+        // Note: Cannot using array_filter with ARRAY_FILTER_USE_KEY, because using PHP 5.5
+        $result = array_intersect_key($result, array_flip($this->names()));
 
         $this->preserveResult = array_merge($this->preserveResult, $result);
 
