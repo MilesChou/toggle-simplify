@@ -17,6 +17,7 @@
         "ext-json": "*"
     },
     "require-dev": {
+        "codacy/coverage": "^1.4",
         "php-coveralls/php-coveralls": "^2.1",
         "phpbench/phpbench": "^0.10.0",
         "phpunit/phpunit": ">=4.8 <6",

@@ -49,7 +49,7 @@ class Toggle implements ToggleInterface
     }
 
     /**
-     * @param string $name
+     * @param mixed $name
      * @param array $feature
      * @throws InvalidArgumentException
      */

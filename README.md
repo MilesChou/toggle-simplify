@@ -1,12 +1,20 @@
 # Toggle (Simplify)
 
+[![License][license-svg]][license-link]
 [![Build Status](https://travis-ci.com/MilesChou/toggle-simplify.svg?branch=master)](https://travis-ci.com/MilesChou/toggle-simplify)
 [![Coverage Status](https://coveralls.io/repos/github/MilesChou/toggle-simplify/badge.svg)](https://coveralls.io/github/MilesChou/toggle-simplify)
+[![Codacy Badge][codacy-svg]][codacy-link]
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MilesChou/toggle-simplify/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MilesChou/toggle-simplify/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/MilesChou/toggle-simplify/v/stable)](https://packagist.org/packages/MilesChou/toggle-simplify)
 [![Total Downloads](https://poser.pugx.org/MilesChou/toggle-simplify/d/total.svg)](https://packagist.org/packages/MilesChou/toggle-simplify)
 [![License](https://poser.pugx.org/MilesChou/toggle-simplify/license)](https://packagist.org/packages/MilesChou/toggle-simplify)
 
 The simplify feature toggle library for PHP
+
+[license-svg]: https://img.shields.io/badge/license-MIT-brightgreen.svg
+[license-link]: https://github.com/oidcphp/support/blob/master/LICENSE
+[codacy-svg]: https://api.codacy.com/project/badge/Grade/ec882d2aaeae43118578bfdf682b42f3
+[codacy-link]: https://www.codacy.com/manual/MilesChou/toggle-simplify
 
 ## Concept
 
