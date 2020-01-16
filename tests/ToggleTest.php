@@ -4,9 +4,10 @@ namespace Tests;
 
 use InvalidArgumentException;
 use MilesChou\Toggle\Simplify\Toggle;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class ToggleTest extends \PHPUnit_Framework_TestCase
+class ToggleTest extends TestCase
 {
     /**
      * @var Toggle
@@ -25,11 +26,10 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException RuntimeException
      */
     public function shouldThrowExceptionWhenCallIsActiveWithNoDataAndStrictMode()
     {
-        $this->setExpectedException(RuntimeException::class);
-
         $this->target->setStrict(true);
 
         $this->target->isActive('not-exist');
@@ -37,11 +37,11 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Feature key 'processor' is not found
      */
     public function shouldThrowExceptionWithoutFeatureProcessor()
     {
-        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `processor` is not found');
-
         $this->target->add('whatever', [
             'params' => [],
         ]);
@@ -64,11 +64,11 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider invalidParams
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Feature key 'params' must be array
      */
     public function shouldThrowExceptionWithFeatureParamsNotArray($invalidParams)
     {
-        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `params` must be array');
-
         $this->target->add('whatever', [
             'processor' => function () {
                 return true;
@@ -79,11 +79,11 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Feature 'not-exist' is not found
      */
     public function shouldThrowExceptionWhenGetFeatureAndFeatureNotFound()
     {
-        $this->setExpectedException(RuntimeException::class, "Feature 'not-exist' is not found");
-
         $this->target->feature('not-exist');
     }
 
@@ -98,11 +98,11 @@ class ToggleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage foo
      */
     public function shouldThrowExceptionWhenCreateFeatureAndRemoveFeature()
     {
-        $this->setExpectedException(RuntimeException::class, 'foo');
-
         $this->target->setStrict(true);
 
         $this->target->create('foo')

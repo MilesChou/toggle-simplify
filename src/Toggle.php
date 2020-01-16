@@ -56,19 +56,19 @@ class Toggle implements ToggleInterface
     private static function assertFeature($name, array $feature)
     {
         if (!is_string($name)) {
-            throw new InvalidArgumentException('Feature key `name` must be string');
+            throw new InvalidArgumentException("Feature key 'name' must be string");
         }
 
         if (!array_key_exists('processor', $feature)) {
-            throw new InvalidArgumentException('Feature key `processor` is not found');
+            throw new InvalidArgumentException("Feature key 'processor' is not found");
         }
 
         if (!is_callable($feature['processor'])) {
-            throw new InvalidArgumentException('Feature key `processor` must be callable');
+            throw new InvalidArgumentException("Feature key 'processor' must be callable");
         }
 
         if (array_key_exists('params', $feature) && !is_array($feature['params'])) {
-            throw new InvalidArgumentException('Feature key `params` must be array');
+            throw new InvalidArgumentException("Feature key 'params' must be array");
         }
     }
 

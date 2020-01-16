@@ -5,9 +5,10 @@ namespace Tests;
 use InvalidArgumentException;
 use MilesChou\Toggle\Simplify\Toggle;
 use MilesChou\Toggle\Simplify\ToggleInterface;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class ToggleBasicTest extends \PHPUnit_Framework_TestCase
+class ToggleBasicTest extends TestCase
 {
     /**
      * @var ToggleInterface
@@ -45,11 +46,11 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider invalidFeature
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Feature key 'name' must be string
      */
     public function shouldThrowExceptionWithInvalidFeature($invalidFeature)
     {
-        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `name` must be string');
-
         $this->target->create($invalidFeature);
     }
 
@@ -67,11 +68,11 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider invalidProcessor
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Feature key 'processor' must be callable
      */
     public function shouldThrowExceptionWithInvalidProcessor($invalidProcessor)
     {
-        $this->setExpectedException(InvalidArgumentException::class, 'Feature key `processor` must be callable');
-
         $this->target->create('foo', $invalidProcessor);
     }
 
@@ -91,11 +92,11 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Feature 'foo' is exist
      */
     public function shouldThrowExceptionWhenAddFeatureButFeatureExist()
     {
-        $this->setExpectedException(RuntimeException::class, "Feature 'foo' is exist");
-
         $this->target->create('foo');
         $this->target->create('foo');
     }
@@ -177,11 +178,10 @@ class ToggleBasicTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException RuntimeException
      */
     public function shouldThrowExceptionWhenCreateFeatureAndReturnNull()
     {
-        $this->setExpectedException(RuntimeException::class);
-
         $this->target->create('foo', function () {
             return null;
         });
