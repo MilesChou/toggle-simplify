@@ -20,7 +20,7 @@
         "codacy/coverage": "^1.4",
         "phpbench/phpbench": "^0.10.0",
         "phpunit/phpunit": ">=4.8 <6",
-        "squizlabs/php_codesniffer": "^3.2"
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
         "psr-4": {
