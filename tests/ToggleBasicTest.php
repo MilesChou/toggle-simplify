@@ -2,11 +2,13 @@
 
 namespace Tests;
 
+use Generator;
 use InvalidArgumentException;
 use MilesChou\Toggle\Simplify\Toggle;
 use MilesChou\Toggle\Simplify\ToggleInterface;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use stdClass;
 
 class ToggleBasicTest extends TestCase
 {
@@ -15,12 +17,12 @@ class ToggleBasicTest extends TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->target = new Toggle();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->target = null;
     }
@@ -39,64 +41,63 @@ class ToggleBasicTest extends TestCase
         return [
             [123],
             [3.14],
-            [new \stdClass()],
+            [new stdClass()],
         ];
     }
 
     /**
      * @test
      * @dataProvider invalidFeature
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Feature key 'name' must be string
      */
     public function shouldThrowExceptionWithInvalidFeature($invalidFeature)
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Feature key 'name' must be string");
+
         $this->target->create($invalidFeature);
     }
 
-    public function invalidProcessor()
+    public function invalidProcessor(): Generator
     {
-        return [
-            [123],
-            [3.14],
-            [''],
-            ['str'],
-            [new \stdClass()],
-        ];
+        yield [123];
+        yield [3.14];
+        yield [''];
+        yield ['str'];
+        yield [new stdClass()];
     }
 
     /**
      * @test
      * @dataProvider invalidProcessor
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Feature key 'processor' must be callable
      */
     public function shouldThrowExceptionWithInvalidProcessor($invalidProcessor)
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Feature key 'processor' must be callable");
+
         $this->target->create('foo', $invalidProcessor);
     }
 
-    public function invalidParams()
+    public function invalidParams(): Generator
     {
-        return [
-            [null],
-            [true],
-            [false],
-            [123],
-            [3.14],
-            [''],
-            ['str'],
-            [new \stdClass()],
-        ];
+        yield [null];
+        yield [true];
+        yield [false];
+        yield [123];
+        yield [3.14];
+        yield [''];
+        yield ['str'];
+        yield [new stdClass()];
     }
 
     /**
      * @test
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Feature 'foo' is exist
      */
     public function shouldThrowExceptionWhenAddFeatureButFeatureExist()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Feature 'foo' is exist");
+
         $this->target->create('foo');
         $this->target->create('foo');
     }
@@ -178,10 +179,11 @@ class ToggleBasicTest extends TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function shouldThrowExceptionWhenCreateFeatureAndReturnNull()
     {
+        $this->expectException(RuntimeException::class);
+
         $this->target->create('foo', function () {
             return null;
         });
@@ -286,7 +288,7 @@ class ToggleBasicTest extends TestCase
             'f1' => [],
             'f2' => [],
             'f3' => [
-                'processor' => true
+                'processor' => true,
             ],
         ]);
 
